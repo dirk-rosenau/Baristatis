@@ -1,6 +1,7 @@
-package com.dr.baristatis
+package com.dr.baristatis.model
 
 data class MyCoffeeData(
+    val id: Int,
     val name: String,
     val manufacturer: String,
     val prefferredBrewingTemperature: Float,
