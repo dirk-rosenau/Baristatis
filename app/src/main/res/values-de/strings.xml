@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Baristatis</string>
+    <string name="ingredients">Zutaten:</string>
+    <string name="remarks">Bemerkungen:</string>
+</resources>

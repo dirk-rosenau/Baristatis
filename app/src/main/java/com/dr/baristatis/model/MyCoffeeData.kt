@@ -7,7 +7,6 @@ data class MyCoffeeData(
     val prefferredBrewingTemperature: Float,
     val brewRatio: String,
     val remarks: String,
-    val arabicaRatio: Int,
-    val robustaRatio: Int,
+    val arabicaRatio: Float,
     val weightInPortafilter: Float
 )
