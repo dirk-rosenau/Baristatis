@@ -1,7 +1,11 @@
 package com.dr.baristatis.model
 
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+
+@Entity(tableName = "coffee_data")
 data class MyCoffeeData(
-    val id: Int,
+    @PrimaryKey val id: Int,
     val name: String,
     val manufacturer: String,
     val prefferredBrewingTemperature: Float,

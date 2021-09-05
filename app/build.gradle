@@ -60,6 +60,10 @@ dependencies {
 
     implementation "androidx.navigation:navigation-compose:2.4.0-alpha07"
 
+    implementation "androidx.room:room-runtime:$room_version"
+    annotationProcessor "androidx.room:room-compiler:$room_version"
+
+
     // Koin core features
     implementation "io.insert-koin:koin-core:$koin_version"
 

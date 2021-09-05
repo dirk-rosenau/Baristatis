@@ -8,6 +8,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -21,6 +22,7 @@ import com.dr.baristatis.commons.OnMyCoffeeItemClicked
 import com.dr.baristatis.model.MyCoffeeData
 import com.dr.baristatis.ui.elements.CoffeeCard
 import com.dr.baristatis.ui.elements.CoffeeDetails
+import com.dr.baristatis.ui.elements.CoffeeEditor
 import com.dr.baristatis.ui.theme.BaristatisTheme
 import com.dr.baristatis.ui.vm.MainViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -59,6 +61,15 @@ fun Content(viewModel: MainViewModel) {
 
                 )
             },
+            floatingActionButton = {
+                FloatingActionButton(
+                    onClick = {
+                        navController.navigate("edit")
+                    }
+                ) {
+                    Icon(Icons.Filled.Add, "")
+                }
+            },
             content = {
                 NavHost(navController = navController, startDestination = "coffeeList") {
                     composable("coffeeList") {
@@ -76,6 +87,18 @@ fun Content(viewModel: MainViewModel) {
                             }
                         }
                     }
+                    composable(
+                        "edit?itemID={itemId}",
+                        arguments = listOf(navArgument("itemId") {
+                            defaultValue = 0
+                            type = NavType.IntType
+                        })
+                    ) { backStackEntry ->
+                        val coffeeData = backStackEntry.arguments?.getInt("itemId")?.let { itemId ->
+                            viewModel.getItem(itemId)
+                        }
+                        CoffeeEditor(myCoffeeData = coffeeData)
+                    }
                 }
             }
         )
@@ -85,7 +108,7 @@ fun Content(viewModel: MainViewModel) {
 @Composable
 fun CoffeeList(coffeeData: List<MyCoffeeData>, onMyCoffeeItemClicked: OnMyCoffeeItemClicked) {
     val scrollState = rememberScrollState()
-    Column (Modifier.verticalScroll(scrollState)){
+    Column(Modifier.verticalScroll(scrollState)) {
         coffeeData.forEach {
             CoffeeCard(myCoffeeData = it, onMyCoffeeItemClicked)
         }
