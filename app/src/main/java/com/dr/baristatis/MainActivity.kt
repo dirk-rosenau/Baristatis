@@ -33,6 +33,7 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+   //     viewModel.seed()
         setContent {
             Content(viewModel = viewModel)
         }
@@ -73,7 +74,7 @@ fun Content(viewModel: MainViewModel) {
             content = {
                 NavHost(navController = navController, startDestination = "coffeeList") {
                     composable("coffeeList") {
-                        CoffeeList(viewModel.getCoffees(), onMyCoffeeItemClicked = { item ->
+                        CoffeeList(viewModel.coffeeData, onMyCoffeeItemClicked = { item ->
                             navController.navigate("details/${item.id}")
                         })
                     }
@@ -106,10 +107,10 @@ fun Content(viewModel: MainViewModel) {
 }
 
 @Composable
-fun CoffeeList(coffeeData: List<MyCoffeeData>, onMyCoffeeItemClicked: OnMyCoffeeItemClicked) {
+fun CoffeeList(coffeeData: List<MyCoffeeData>?, onMyCoffeeItemClicked: OnMyCoffeeItemClicked) {
     val scrollState = rememberScrollState()
     Column(Modifier.verticalScroll(scrollState)) {
-        coffeeData.forEach {
+        coffeeData?.forEach {
             CoffeeCard(myCoffeeData = it, onMyCoffeeItemClicked)
         }
     }

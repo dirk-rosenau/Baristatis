@@ -10,11 +10,11 @@ import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
 val mainModule = module {
-    single { CoffeeRepository() }
-    viewModel { MainViewModel(get()) }
     single {
         Room.databaseBuilder(androidApplication(), AppDatabase::class.java, "baristatis-db")
             .build()
     }
     single { get<AppDatabase>().coffeeDataDao() }
+    single { CoffeeRepository(get()) }
+    viewModel { MainViewModel(get()) }
 }

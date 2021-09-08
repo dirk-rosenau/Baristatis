@@ -9,11 +9,11 @@ import com.dr.baristatis.model.MyCoffeeData
 @Dao
 interface CoffeeDataDao {
     @Query("SELECT * FROM coffee_data")
-    fun getAll(): List<MyCoffeeData>
+    suspend fun getAll(): List<MyCoffeeData>
 
     @Insert
-    fun insert(note: MyCoffeeData)
+    suspend fun insert(data: MyCoffeeData)
 
     @Delete
-    fun delete(note: MyCoffeeData)
+    suspend fun delete(data: MyCoffeeData)
 }
