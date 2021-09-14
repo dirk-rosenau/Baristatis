@@ -33,7 +33,7 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-   //     viewModel.seed()
+        // viewModel.seed()
         setContent {
             Content(viewModel = viewModel)
         }
@@ -98,7 +98,9 @@ fun Content(viewModel: MainViewModel) {
                         val coffeeData = backStackEntry.arguments?.getInt("itemId")?.let { itemId ->
                             viewModel.getItem(itemId)
                         }
-                        CoffeeEditor(myCoffeeData = coffeeData)
+                        CoffeeEditor(myCoffeeData = coffeeData) {
+                            it?.let { viewModel.saveCoffee(it) }
+                        }
                     }
                 }
             }

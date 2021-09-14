@@ -47,4 +47,8 @@ class CoffeeRepository(private val coffeeDataDao: CoffeeDataDao) {
 
     )
 
+    suspend fun saveCoffee(coffeeData: MyCoffeeData) {
+        coffeeDataDao.insert(coffeeData)
+    }
+
 }

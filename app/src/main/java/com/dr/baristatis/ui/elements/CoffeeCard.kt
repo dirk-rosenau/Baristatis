@@ -76,11 +76,14 @@ fun CoffeeCard(myCoffeeData: MyCoffeeData, onMyCoffeeItemClicked: OnMyCoffeeItem
                             color = MaterialTheme.colors.primary.copy(alpha = ProgressIndicatorDefaults.IndicatorBackgroundOpacity)
                         )
                     }
-                    LinearProgressIndicator(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(5.dp), progress = myCoffeeData.arabicaRatio
-                    )
+                    myCoffeeData.arabicaRatio?.let { ratio ->
+                        LinearProgressIndicator(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(5.dp),
+                            progress = ratio
+                        )
+                    }
                 }
             }
             Text(

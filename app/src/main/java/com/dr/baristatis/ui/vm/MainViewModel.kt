@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.dr.baristatis.model.MyCoffeeData
 import com.dr.baristatis.repository.CoffeeRepository
 import kotlinx.coroutines.launch
@@ -30,6 +31,12 @@ class MainViewModel(private val coffeeRepository: CoffeeRepository) : ViewModel(
     fun seed() {
         viewModelScope.launch {
             coffeeRepository.seed()
+        }
+    }
+
+    fun saveCoffee(coffeeData: MyCoffeeData) {
+        viewModelScope.launch {
+            coffeeRepository.saveCoffee(coffeeData)
         }
     }
 }
