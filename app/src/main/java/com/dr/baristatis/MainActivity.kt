@@ -73,11 +73,13 @@ fun Content(viewModel: MainViewModel) {
             },
             content = {
                 NavHost(navController = navController, startDestination = "coffeeList") {
+                    // main list
                     composable("coffeeList") {
-                        CoffeeList(viewModel.coffeeData, onMyCoffeeItemClicked = { item ->
+                        CoffeeList(viewModel.coffeeDataList, onMyCoffeeItemClicked = { item ->
                             navController.navigate("details/${item.id}")
                         })
                     }
+                    // details view
                     composable(
                         "details/{itemId}",
                         arguments = listOf(navArgument("itemId") { type = NavType.IntType })
@@ -88,6 +90,7 @@ fun Content(viewModel: MainViewModel) {
                             }
                         }
                     }
+                    //
                     composable(
                         "edit?itemID={itemId}",
                         arguments = listOf(navArgument("itemId") {
@@ -99,7 +102,10 @@ fun Content(viewModel: MainViewModel) {
                             viewModel.getItem(itemId)
                         }
                         CoffeeEditor(myCoffeeData = coffeeData) {
-                            it?.let { viewModel.saveCoffee(it) }
+                            it?.let {
+                                viewModel.saveCoffee(it)
+                                navController.popBackStack()
+                            }
                         }
                     }
                 }
