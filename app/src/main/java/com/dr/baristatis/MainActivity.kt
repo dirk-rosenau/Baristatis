@@ -3,15 +3,14 @@ package com.dr.baristatis
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -19,7 +18,6 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.navArgument
 import androidx.navigation.compose.rememberNavController
 import com.dr.baristatis.commons.OnMyCoffeeItemClicked
-import com.dr.baristatis.model.MyCoffeeData
 import com.dr.baristatis.ui.elements.CoffeeCard
 import com.dr.baristatis.ui.elements.CoffeeDetails
 import com.dr.baristatis.ui.elements.CoffeeEditor
@@ -33,7 +31,7 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        // viewModel.seed()
+        // viewModel.seedTestData()
         setContent {
             Content(viewModel = viewModel)
         }
@@ -75,7 +73,7 @@ fun Content(viewModel: MainViewModel) {
                 NavHost(navController = navController, startDestination = "coffeeList") {
                     // main list
                     composable("coffeeList") {
-                        CoffeeList(viewModel.coffeeDataList, onMyCoffeeItemClicked = { item ->
+                        CoffeeList(viewModel, onMyCoffeeItemClicked = { item ->
                             navController.navigate("details/${item.id}")
                         })
                     }
@@ -115,11 +113,11 @@ fun Content(viewModel: MainViewModel) {
 }
 
 @Composable
-fun CoffeeList(coffeeData: List<MyCoffeeData>?, onMyCoffeeItemClicked: OnMyCoffeeItemClicked) {
-    val scrollState = rememberScrollState()
-    Column(Modifier.verticalScroll(scrollState)) {
-        coffeeData?.forEach {
-            CoffeeCard(myCoffeeData = it, onMyCoffeeItemClicked)
+fun CoffeeList(viewModel: MainViewModel, onMyCoffeeItemClicked: OnMyCoffeeItemClicked) {
+    val coffees = viewModel.coffees.collectAsState()
+    LazyColumn {
+        items(coffees.value) { coffee ->
+            CoffeeCard(myCoffeeData = coffee, onMyCoffeeItemClicked = onMyCoffeeItemClicked)
         }
     }
 }

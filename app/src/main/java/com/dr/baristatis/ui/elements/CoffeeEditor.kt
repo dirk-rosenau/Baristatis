@@ -14,10 +14,16 @@ import androidx.compose.ui.unit.dp
 import com.dr.baristatis.R
 import com.dr.baristatis.model.MyCoffeeData
 
+
 @Composable
 fun CoffeeEditor(myCoffeeData: MyCoffeeData?, onCoffeeDataAdded: ((MyCoffeeData?) -> Unit)) {
     var name by remember { mutableStateOf(myCoffeeData?.name) }
     var manufacturer by remember { mutableStateOf(myCoffeeData?.manufacturer) }
+    var arabicaRatio by remember { mutableStateOf(myCoffeeData?.arabicaRatio ?: 0.8f) }
+    //myCoffeeData.weightInPortafilter
+    // myCoffeeData.prefferredBrewingTemperature
+    // myCoffeeData.arabicaRatio / robusta ratio
+    //myCoffeeData.remarks (grosses feld)
 
     Column {
         InputField(
@@ -29,15 +35,27 @@ fun CoffeeEditor(myCoffeeData: MyCoffeeData?, onCoffeeDataAdded: ((MyCoffeeData?
             text = manufacturer,
             onChange = { manufacturer = it })
 
-        Button(onClick = {
-            onCoffeeDataAdded.invoke(
-                createCoffeeData(
-                    myCoffeeData,
-                    name,
-                    manufacturer
+        RatioEditor(
+            leftText = stringResource(id = R.string.arabicaRatio), rightText = stringResource(
+                id = R.string.robustaRatio
+            ), ratio = arabicaRatio,
+            onValueChange = { ratio -> arabicaRatio = ratio }
+        )
+
+        Button(modifier = Modifier
+            .padding(top = 40.dp)
+            .fillMaxWidth()
+            .padding(10.dp),
+            onClick = {
+                onCoffeeDataAdded.invoke(
+                    createCoffeeData(
+                        myCoffeeData,
+                        name,
+                        manufacturer,
+                        arabicaRatio
+                    )
                 )
-            )
-        }) {
+            }) {
             Text("Save")
         }
     }
@@ -46,13 +64,15 @@ fun CoffeeEditor(myCoffeeData: MyCoffeeData?, onCoffeeDataAdded: ((MyCoffeeData?
 fun createCoffeeData(
     myCoffeeData: MyCoffeeData?,
     name: String?,
-    manufacturer: String?
+    manufacturer: String?,
+    arabicaRatio: Float?
 ): MyCoffeeData? {
     if (name != null && manufacturer != null) {
         val data = MyCoffeeData(
             myCoffeeData?.id,
             name = name,
-            manufacturer = manufacturer
+            manufacturer = manufacturer,
+            arabicaRatio = arabicaRatio
         )
         return data
     }

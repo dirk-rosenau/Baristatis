@@ -5,11 +5,12 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import com.dr.baristatis.model.MyCoffeeData
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface CoffeeDataDao {
     @Query("SELECT * FROM coffee_data")
-    suspend fun getAll(): List<MyCoffeeData>
+    fun getAll(): Flow<List<MyCoffeeData>>
 
     @Insert
     suspend fun insert(data: MyCoffeeData)

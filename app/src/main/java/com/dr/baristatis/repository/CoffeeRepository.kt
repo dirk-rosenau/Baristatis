@@ -11,7 +11,7 @@ class CoffeeRepository(private val coffeeDataDao: CoffeeDataDao) {
         }
     }
 
-    suspend fun getCoffees() = coffeeDataDao.getAll()
+    fun getCoffees() = coffeeDataDao.getAll()
 
     private fun mockCoffees() = listOf(
         MyCoffeeData(1, "Berliner Perle", "Berliner Kaffeerösterei", 93f, "1:2", "", 0.8f, 16f),

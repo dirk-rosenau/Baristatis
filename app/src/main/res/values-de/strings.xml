@@ -7,7 +7,8 @@
     <string name="manufacturer">Hersteller:</string>
     <string name="prefferredBrewingTemperature">Temperatur:</string>
     <string name="brewRatio">Brühverhältnis:</string>
-    <string name="arabicaRatio">Arabica:</string>
+    <string name="arabicaRatio">Arabica</string>
+    <string name="robustaRatio">Robusta</string>
     <string name="weightInPortafilter">Gewicht in Siebträger</string>
-    <string name="robustaRatio">Robusta:</string>
+    <string name="tmpRatioSliderLabel">%1$2d %%</string>
 </resources>
