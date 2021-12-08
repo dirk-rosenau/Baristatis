@@ -15,8 +15,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.compose.navArgument
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.dr.baristatis.commons.OnMyCoffeeItemClicked
 import com.dr.baristatis.ui.elements.CoffeeCard
 import com.dr.baristatis.ui.elements.CoffeeDetails
