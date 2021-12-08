@@ -3,13 +3,17 @@ package com.dr.baristatis.ui.elements
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Button
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.dr.baristatis.R
 import com.dr.baristatis.model.MyCoffeeData
@@ -20,12 +24,12 @@ fun CoffeeEditor(myCoffeeData: MyCoffeeData?, onCoffeeDataAdded: ((MyCoffeeData?
     var name by remember { mutableStateOf(myCoffeeData?.name) }
     var manufacturer by remember { mutableStateOf(myCoffeeData?.manufacturer) }
     var arabicaRatio by remember { mutableStateOf(myCoffeeData?.arabicaRatio ?: 0.8f) }
+    var remarks by remember { mutableStateOf(myCoffeeData?.remarks) }
     //myCoffeeData.weightInPortafilter
     // myCoffeeData.prefferredBrewingTemperature
-    // myCoffeeData.arabicaRatio / robusta ratio
     //myCoffeeData.remarks (grosses feld)
 
-    Column {
+    Column(Modifier.verticalScroll(rememberScrollState())) {
         InputField(
             title = stringResource(R.string.coffee_name),
             text = name,
@@ -40,6 +44,12 @@ fun CoffeeEditor(myCoffeeData: MyCoffeeData?, onCoffeeDataAdded: ((MyCoffeeData?
                 id = R.string.robustaRatio
             ), ratio = arabicaRatio,
             onValueChange = { ratio -> arabicaRatio = ratio }
+        )
+
+        InputField(
+            title = stringResource(R.string.remarks),
+            text = remarks,
+            onChange = { remarks = it }, height = 250.dp
         )
 
         Button(modifier = Modifier
@@ -80,13 +90,24 @@ fun createCoffeeData(
 }
 
 @Composable
-fun InputField(title: String, text: String?, onChange: (String) -> Unit) {
+fun InputField(
+    title: String,
+    text: String?,
+    onChange: (String) -> Unit,
+    maxLines: Int = 1,
+    height: Dp? = null
+) {
     OutlinedTextField(
         value = text ?: "",
         modifier = Modifier
             .fillMaxWidth()
-            .padding(10.dp),
+            .padding(10.dp).let {
+                return@let if (height != null) {
+                    it.height(height)
+                } else it
+            },
         onValueChange = onChange,
-        label = { Text(title) }
+        label = { Text(title) },
+        maxLines = maxLines
     )
 }

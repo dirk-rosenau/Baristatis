@@ -65,7 +65,7 @@ fun CoffeeCard(myCoffeeData: MyCoffeeData, onMyCoffeeItemClicked: OnMyCoffeeItem
                 modifier = Modifier.padding(10.dp)
             )
             { // second row: ratio
-                Text(text = stringResource(R.string.ingredients))
+                Text(text = "${stringResource(R.string.ingredients)}:")
 
                 RatioPresenter(
                     leftText = stringResource(R.string.arabicaRatio),
@@ -74,7 +74,7 @@ fun CoffeeCard(myCoffeeData: MyCoffeeData, onMyCoffeeItemClicked: OnMyCoffeeItem
                 )
             }
             Text(
-                text = stringResource(id = R.string.remarks),
+                text = "${stringResource(id = R.string.remarks)}:",
                 modifier = Modifier.getDefaultTextPadding()
             )
             Text(

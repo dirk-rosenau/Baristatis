@@ -1,13 +1,13 @@
 <resources>
     <string name="app_name">Baristatis</string>
-    <string name="ingredients">Ingr:</string>
-    <string name="remarks">Remarks:</string>
-    <string name="coffee_name">Name:</string>
-    <string name="manufacturer">Manufacturer:</string>
-    <string name="prefferredBrewingTemperature">Temperature:</string>
-    <string name="brewRatio">Brew ratio:</string>
+    <string name="ingredients">Ingr</string>
+    <string name="remarks">Remarks</string>
+    <string name="coffee_name">Name</string>
+    <string name="manufacturer">Manufacturer</string>
+    <string name="prefferredBrewingTemperature">Temperature</string>
+    <string name="brewRatio">Brew ratio</string>
     <string name="arabicaRatio">Arabica</string>
     <string name="robustaRatio">Robusta</string>
-    <string name="weightInPortafilter">Weight in Filter:</string>
+    <string name="weightInPortafilter">Weight in Filter</string>
     <string name="tmpRatioSliderLabel">%1$d %%</string>
 </resources>

@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Baristatis</string>
-    <string name="ingredients">Zutaten:</string>
-    <string name="remarks">Bemerkungen:</string>
-    <string name="coffee_name">Name:</string>
-    <string name="manufacturer">Hersteller:</string>
-    <string name="prefferredBrewingTemperature">Temperatur:</string>
-    <string name="brewRatio">Brühverhältnis:</string>
+    <string name="ingredients">Zutaten</string>
+    <string name="remarks">Bemerkungen</string>
+    <string name="coffee_name">Name</string>
+    <string name="manufacturer">Hersteller</string>
+    <string name="prefferredBrewingTemperature">Temperatur</string>
+    <string name="brewRatio">Brühverhältnis</string>
     <string name="arabicaRatio">Arabica</string>
     <string name="robustaRatio">Robusta</string>
     <string name="weightInPortafilter">Gewicht in Siebträger</string>
