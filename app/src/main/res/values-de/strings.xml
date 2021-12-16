@@ -11,4 +11,5 @@
     <string name="robustaRatio">Robusta</string>
     <string name="weightInPortafilter">Gewicht in Siebträger</string>
     <string name="tmpRatioSliderLabel">%1$2d %%</string>
+    <string name="addCoffee">Füge Deinen ersten Kaffee hinzu!</string>
 </resources>

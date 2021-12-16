@@ -1,11 +1,8 @@
 package com.dr.baristatis.ui.elements
 
-
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Button
 import androidx.compose.material.OutlinedTextField
@@ -13,6 +10,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.dr.baristatis.R
@@ -25,11 +23,14 @@ fun CoffeeEditor(myCoffeeData: MyCoffeeData?, onCoffeeDataAdded: ((MyCoffeeData?
     var manufacturer by remember { mutableStateOf(myCoffeeData?.manufacturer) }
     var arabicaRatio by remember { mutableStateOf(myCoffeeData?.arabicaRatio ?: 0.8f) }
     var remarks by remember { mutableStateOf(myCoffeeData?.remarks) }
-    //myCoffeeData.weightInPortafilter
-    // myCoffeeData.prefferredBrewingTemperature
-    //myCoffeeData.remarks (grosses feld)
+    var preferreedBrewingTemperatur by remember { mutableStateOf(myCoffeeData?.prefferredBrewingTemperature) }
+    var weightInPortaFilter by remember { mutableStateOf(myCoffeeData?.weightInPortafilter) }
 
-    Column(Modifier.verticalScroll(rememberScrollState())) {
+    Column(
+        Modifier
+            .fillMaxSize()
+            .verticalScroll(rememberScrollState())
+    ) {
         InputField(
             title = stringResource(R.string.coffee_name),
             text = name,
@@ -45,6 +46,40 @@ fun CoffeeEditor(myCoffeeData: MyCoffeeData?, onCoffeeDataAdded: ((MyCoffeeData?
             ), ratio = arabicaRatio,
             onValueChange = { ratio -> arabicaRatio = ratio }
         )
+
+        Row(modifier = Modifier.fillMaxSize(), horizontalArrangement = Arrangement.SpaceEvenly) {
+
+            // TODO icon
+            Text("Temp")
+            OutlinedTextField(
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                value = preferreedBrewingTemperatur?.toString() ?: "",
+                onValueChange = {
+                    try {
+                        preferreedBrewingTemperatur = it.toFloat()
+                    } catch (e: NumberFormatException) {
+                        // do nothing
+                    }
+                },
+                modifier = Modifier.width(100.dp),
+                maxLines = 1
+            )
+            // TODO icon
+            Text("Gew")
+            OutlinedTextField(
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                value = weightInPortaFilter?.toString() ?: "",
+                modifier = Modifier.width(100.dp),
+                onValueChange = {
+                    try {
+                        weightInPortaFilter = it.toFloat()
+                    } catch (e: NumberFormatException) {
+                        // do nothing
+                    }
+                },
+                maxLines = 1
+            )
+       }
 
         InputField(
             title = stringResource(R.string.remarks),
@@ -93,15 +128,22 @@ fun createCoffeeData(
 fun InputField(
     title: String,
     text: String?,
+    modifier: Modifier? = null,
     onChange: (String) -> Unit,
     maxLines: Int = 1,
-    height: Dp? = null
+    height: Dp? = null,
+    keyboardOptions: KeyboardOptions? = null
 ) {
     OutlinedTextField(
+        keyboardOptions = keyboardOptions ?: KeyboardOptions.Default,
         value = text ?: "",
         modifier = Modifier
             .fillMaxWidth()
-            .padding(10.dp).let {
+            .padding(10.dp)
+            .let {
+                return@let modifier ?: it
+            }
+            .let {
                 return@let if (height != null) {
                     it.height(height)
                 } else it

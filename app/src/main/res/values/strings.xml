@@ -10,4 +10,5 @@
     <string name="robustaRatio">Robusta</string>
     <string name="weightInPortafilter">Weight in Filter</string>
     <string name="tmpRatioSliderLabel">%1$d %%</string>
+    <string name="addCoffee">Add your first coffee!</string>
 </resources>
