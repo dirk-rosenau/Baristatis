@@ -3,11 +3,15 @@ package com.dr.baristatis
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Menu
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.view.WindowCompat
@@ -36,7 +40,7 @@ class MainActivity : ComponentActivity() {
 
         WindowCompat.setDecorFitsSystemWindows(window, false)
 
-         setContent {
+        setContent {
             ProvideWindowInsets {
                 Content(viewModel = viewModel)
             }
@@ -47,6 +51,8 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun Content(viewModel: MainViewModel) {
     BaristatisTheme {
+        var showFAB by remember { mutableStateOf(true) }
+        var showBack by remember { mutableStateOf(false) }
         val navController = rememberNavController()
         Scaffold(
             modifier = Modifier
@@ -57,31 +63,46 @@ fun Content(viewModel: MainViewModel) {
                 TopAppBar(
                     title = { Text("Baristatis") },
                     navigationIcon = {
-                        IconButton(
-                            onClick = {
-// https://developer.android.com/reference/kotlin/androidx/compose/material/package-summary#Scaffold(androidx.compose.ui.Modifier,androidx.compose.material.ScaffoldState,kotlin.Function0,kotlin.Function0,kotlin.Function1,kotlin.Function0,androidx.compose.material.FabPosition,kotlin.Boolean,kotlin.Function1,kotlin.Boolean,androidx.compose.ui.graphics.Shape,androidx.compose.ui.unit.Dp,androidx.compose.ui.graphics.Color,androidx.compose.ui.graphics.Color,androidx.compose.ui.graphics.Color,androidx.compose.ui.graphics.Color,androidx.compose.ui.graphics.Color,kotlin.Function1)
-                                // beim öffnen denk an coroutine!
-                            }
+                        AnimatedVisibility(
+                            enter = fadeIn(), exit = fadeOut(),
+                            visible = showBack
                         ) {
-                            Icon(Icons.Filled.Menu, contentDescription = "Localized description")
+                            IconButton(
+                                onClick = {
+                                    navController.popBackStack()
+// https://developer.android.com/reference/kotlin/androidx/compose/material/package-summary#Scaffold(androidx.compose.ui.Modifier,androidx.compose.material.ScaffoldState,kotlin.Function0,kotlin.Function0,kotlin.Function1,kotlin.Function0,androidx.compose.material.FabPosition,kotlin.Boolean,kotlin.Function1,kotlin.Boolean,androidx.compose.ui.graphics.Shape,androidx.compose.ui.unit.Dp,androidx.compose.ui.graphics.Color,androidx.compose.ui.graphics.Color,androidx.compose.ui.graphics.Color,androidx.compose.ui.graphics.Color,androidx.compose.ui.graphics.Color,kotlin.Function1)
+                                    // beim öffnen denk an coroutine!
+                                }
+                            ) {
+                                Icon(
+                                    Icons.Filled.ArrowBack,
+                                    contentDescription = "Localized description"
+                                )
+                            }
                         }
                     }
-
                 )
             },
             floatingActionButton = {
-                FloatingActionButton(
-                    onClick = {
-                        navController.navigate("edit/0")
-                    }
+                AnimatedVisibility(
+                    enter = fadeIn(), exit = fadeOut(),
+                    visible = showFAB
                 ) {
-                    Icon(Icons.Filled.Add, "")
+                    FloatingActionButton(
+                        onClick = {
+                            navController.navigate("edit/0")
+                        }
+                    ) {
+                        Icon(Icons.Filled.Add, "")
+                    }
                 }
             },
             content = {
                 NavHost(navController = navController, startDestination = "coffeeList") {
                     // main list
                     composable("coffeeList") {
+                        showFAB = true
+                        showBack = false
                         CoffeeMainScreen(viewModel, onMyCoffeeItemClicked = { item ->
                             navController.navigate("edit/${item.id}")
                         })
@@ -94,6 +115,8 @@ fun Content(viewModel: MainViewModel) {
                             type = NavType.IntType
                         })
                     ) { backStackEntry ->
+                        showFAB = false
+                        showBack = true
                         val coffeeData = backStackEntry.arguments?.getInt("itemId")?.let { itemId ->
                             viewModel.getItem(itemId)
                         }
