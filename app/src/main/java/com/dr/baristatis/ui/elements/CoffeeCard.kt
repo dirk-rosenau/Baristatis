@@ -42,7 +42,7 @@ fun CoffeeCard(myCoffeeData: MyCoffeeData, onMyCoffeeItemClicked: OnMyCoffeeItem
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier.fillMaxWidth()
             ) { // first section: image, names temp and weight
-                Image(
+               /* Image(
                     painter = painterResource(id = R.drawable.coffee_beans), // TODO use image from data
                     contentDescription = "",
                     contentScale = ContentScale.Crop,
@@ -50,7 +50,8 @@ fun CoffeeCard(myCoffeeData: MyCoffeeData, onMyCoffeeItemClicked: OnMyCoffeeItem
                         .padding(10.dp)
                         .size(72.dp)
                         .clip(CircleShape)
-                )
+                )*/
+                Spacer(modifier =   Modifier.padding(10.dp))
                 Column(Modifier.weight(4f)) {
                     Text(text = myCoffeeData.name, fontSize = 24.sp)
                     Text(text = myCoffeeData.manufacturer, fontSize = 14.sp)
@@ -78,8 +79,9 @@ fun CoffeeCard(myCoffeeData: MyCoffeeData, onMyCoffeeItemClicked: OnMyCoffeeItem
                 modifier = Modifier.getDefaultTextPadding()
             )
             Text(
-                text = "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.",
+                text = myCoffeeData.remarks ?: "",
                 modifier = Modifier
+                    .fillMaxWidth()
                     .getDefaultTextPadding()
                     .border(
                         width = 1.dp,

@@ -12,4 +12,11 @@
     <string name="weightInPortafilter">Gewicht in Siebträger</string>
     <string name="tmpRatioSliderLabel">%1$2d %%</string>
     <string name="addCoffee">Füge Deinen ersten Kaffee hinzu!</string>
+    <string name="save">Speichern</string>
+    <string name="delete">Löschen</string>
+    <string name="confirm_delete_explain">Wollen Sie den Datensatz wirklich löschen?</string>
+    <string name="yes">Ja</string>
+    <string name="no">Nein</string>
+    <string name="weight">Gewicht</string>
+    <string name="temp">Temp</string>
 </resources>

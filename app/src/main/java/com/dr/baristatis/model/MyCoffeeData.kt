@@ -8,9 +8,10 @@ data class MyCoffeeData(
     @PrimaryKey val id: Int?,
     val name: String,
     val manufacturer: String,
-    val prefferredBrewingTemperature: Float? = null,
+    val prefferredBrewingTemperature: Int? = null,
     val brewRatio: String? = null,
     val remarks: String? = null,
     val arabicaRatio: Float? = null,
-    val weightInPortafilter: Float? = null
+    val weightInPortafilter: Float? = null,
+    val deggreeOfGrinding: Int?
 )

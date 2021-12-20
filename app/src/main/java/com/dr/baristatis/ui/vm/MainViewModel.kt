@@ -26,16 +26,15 @@ class MainViewModel(private val coffeeRepository: CoffeeRepository) : ViewModel(
 
     fun getItem(itemId: Int) = coffees.value.find { it.id == itemId }
 
-
-    fun seedTestData() {
-        viewModelScope.launch {
-            coffeeRepository.seed()
-        }
-    }
-
     fun saveCoffee(coffeeData: MyCoffeeData) {
         viewModelScope.launch {
             coffeeRepository.saveCoffee(coffeeData)
+        }
+    }
+
+    fun deleteCoffeeData(id: Int){
+        viewModelScope.launch {
+            coffeeRepository.deleteCoffee(id)
         }
     }
 }

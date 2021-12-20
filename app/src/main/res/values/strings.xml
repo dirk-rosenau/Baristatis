@@ -11,4 +11,11 @@
     <string name="weightInPortafilter">Weight in Filter</string>
     <string name="tmpRatioSliderLabel">%1$d %%</string>
     <string name="addCoffee">Add your first coffee!</string>
+    <string name="save">Save</string>
+    <string name="delete">Delete</string>
+    <string name="confirm_delete_explain">Are you sure you want to delete this data set?</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="weight">weight</string>
+    <string name="temp">temp</string>
 </resources>

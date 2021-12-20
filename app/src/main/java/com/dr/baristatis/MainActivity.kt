@@ -8,7 +8,9 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.core.view.WindowCompat
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -19,6 +21,10 @@ import com.dr.baristatis.ui.elements.CoffeeEditor
 import com.dr.baristatis.ui.elements.CoffeeMainScreen
 import com.dr.baristatis.ui.theme.BaristatisTheme
 import com.dr.baristatis.ui.vm.MainViewModel
+import com.google.accompanist.insets.ProvideWindowInsets
+import com.google.accompanist.insets.navigationBarsWithImePadding
+import com.google.accompanist.insets.statusBarsPadding
+import com.google.accompanist.insets.systemBarsPadding
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
@@ -28,9 +34,12 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // viewModel.seedTestData()
-        setContent {
-            Content(viewModel = viewModel)
+        WindowCompat.setDecorFitsSystemWindows(window, false)
+
+         setContent {
+            ProvideWindowInsets {
+                Content(viewModel = viewModel)
+            }
         }
     }
 }
@@ -40,6 +49,9 @@ fun Content(viewModel: MainViewModel) {
     BaristatisTheme {
         val navController = rememberNavController()
         Scaffold(
+            modifier = Modifier
+                .statusBarsPadding()
+                .navigationBarsWithImePadding(),
             topBar =
             {
                 TopAppBar(
@@ -60,7 +72,7 @@ fun Content(viewModel: MainViewModel) {
             floatingActionButton = {
                 FloatingActionButton(
                     onClick = {
-                        navController.navigate("edit")
+                        navController.navigate("edit/0")
                     }
                 ) {
                     Icon(Icons.Filled.Add, "")
@@ -71,23 +83,12 @@ fun Content(viewModel: MainViewModel) {
                     // main list
                     composable("coffeeList") {
                         CoffeeMainScreen(viewModel, onMyCoffeeItemClicked = { item ->
-                            navController.navigate("details/${item.id}")
+                            navController.navigate("edit/${item.id}")
                         })
                     }
-                    // details view
+                    // editor
                     composable(
-                        "details/{itemId}",
-                        arguments = listOf(navArgument("itemId") { type = NavType.IntType })
-                    ) { backStackEntry ->
-                        backStackEntry.arguments?.getInt("itemId")?.also { itemId ->
-                            viewModel.getItem(itemId)?.also {
-                                CoffeeDetails(it)
-                            }
-                        }
-                    }
-                    //
-                    composable(
-                        "edit?itemID={itemId}",
+                        "edit/{itemId}",
                         arguments = listOf(navArgument("itemId") {
                             defaultValue = 0
                             type = NavType.IntType
@@ -96,12 +97,19 @@ fun Content(viewModel: MainViewModel) {
                         val coffeeData = backStackEntry.arguments?.getInt("itemId")?.let { itemId ->
                             viewModel.getItem(itemId)
                         }
-                        CoffeeEditor(myCoffeeData = coffeeData) {
-                            it?.let {
-                                viewModel.saveCoffee(it)
+                        CoffeeEditor(myCoffeeData = coffeeData,
+                            onCoffeeDataAdded = {
+                                it?.let {
+                                    viewModel.saveCoffee(it)
+                                    navController.popBackStack()
+                                }
+                            },
+                            onCoffeeDataDeleted = {
+                                it?.let {
+                                    viewModel.deleteCoffeeData(it)
+                                }
                                 navController.popBackStack()
-                            }
-                        }
+                            })
                     }
                 }
             }
