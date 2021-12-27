@@ -1,21 +1,24 @@
 package com.dr.baristatis.ui.theme
 
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.material.Colors
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.darkColors
 import androidx.compose.material.lightColors
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.Color
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 private val DarkColorPalette = darkColors(
         primary = BrownLight,
-        primaryVariant = Purple700,
+        primaryVariant = Brown,
         secondary = Grey1
 )
 
 private val LightColorPalette = lightColors(
         primary = Brown,
-        primaryVariant = Purple700,
-        secondary = Grey1
+        primaryVariant = BrownLight,
+        secondary = Grey1,
 
         /* Other default colors to override
     background = Color.White,
@@ -23,17 +26,20 @@ private val LightColorPalette = lightColors(
     onPrimary = Color.White,
     onSecondary = Color.Black,
     onBackground = Color.Black,
-    onSurface = Color.Black,
-    */
+    onSurface = Color.Black, */
+
 )
 
 @Composable
-fun BaristatisTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Composable() () -> Unit) {
+fun BaristatisTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Composable () -> Unit) {
+    val systemUiController = rememberSystemUiController()
     val colors = if (darkTheme) {
         DarkColorPalette
     } else {
         LightColorPalette
     }
+
+    systemUiController.setSystemBarsColor(color = colors.primaryVariant)
 
     MaterialTheme(
             colors = colors,

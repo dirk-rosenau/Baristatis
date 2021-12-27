@@ -13,6 +13,7 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.view.WindowCompat
 import androidx.navigation.NavType
@@ -60,6 +61,7 @@ fun Content(viewModel: MainViewModel) {
                 .navigationBarsWithImePadding(),
             topBar =
             {
+                // CompositionLocalProvider(LocalElevationOverlay provides null) {
                 TopAppBar(
                     title = { Text("Baristatis") },
                     navigationIcon = {
@@ -82,6 +84,7 @@ fun Content(viewModel: MainViewModel) {
                         }
                     }
                 )
+                //   }
             },
             floatingActionButton = {
                 AnimatedVisibility(
