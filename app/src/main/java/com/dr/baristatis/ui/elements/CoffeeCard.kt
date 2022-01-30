@@ -57,8 +57,13 @@ fun CoffeeCard(myCoffeeData: MyCoffeeData, onMyCoffeeItemClicked: OnMyCoffeeItem
                     Text(text = myCoffeeData.manufacturer, fontSize = 14.sp)
                 }
                 Column(modifier = Modifier.weight(1f)) {
-                    Text(text = "${myCoffeeData.prefferredBrewingTemperature} °")
-                    Text(text = "${myCoffeeData.weightInPortafilter} g")
+                    myCoffeeData.prefferredBrewingTemperature?.let{
+                        Text(text = "$it °")
+                    }
+
+                    myCoffeeData.weightInPortafilter?.let {
+                        Text(text = "$it g")
+                    }
                 }
             }
             Row(
@@ -74,28 +79,31 @@ fun CoffeeCard(myCoffeeData: MyCoffeeData, onMyCoffeeItemClicked: OnMyCoffeeItem
                     ratio = myCoffeeData.arabicaRatio ?: 0.8f
                 )
             }
-            Text(
-                text = "${stringResource(id = R.string.remarks)}:",
-                modifier = Modifier.getDefaultTextPadding()
-            )
-            Text(
-                text = myCoffeeData.remarks ?: "",
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .getDefaultTextPadding()
-                    .border(
-                        width = 1.dp,
-                        color = MaterialTheme.colors.primary,
-                        shape = RoundedCornerShape(4.dp)
-                    )
-                    .padding(10.dp)
-                    .animateContentSize()
-                    .clickable {
-                        maxLines.value = if (maxLines.value == Int.MAX_VALUE) 5 else Int.MAX_VALUE
-                    },
-                overflow = TextOverflow.Ellipsis,
-                maxLines = maxLines.value,
-            )
+
+            if (myCoffeeData.remarks != null) {
+                Text(
+                    text = "${stringResource(id = R.string.remarks)}:",
+                    modifier = Modifier.getDefaultTextPadding()
+                )
+                Text(
+                    text = myCoffeeData.remarks ?: "",
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .getDefaultTextPadding()
+                        .border(
+                            width = 1.dp,
+                            color = MaterialTheme.colors.primary,
+                            shape = RoundedCornerShape(4.dp)
+                        )
+                        .padding(10.dp)
+                        .animateContentSize()
+                        .clickable {
+                            maxLines.value = if (maxLines.value == Int.MAX_VALUE) 5 else Int.MAX_VALUE
+                        },
+                    overflow = TextOverflow.Ellipsis,
+                    maxLines = maxLines.value,
+                )
+            }
         }
     }
 }

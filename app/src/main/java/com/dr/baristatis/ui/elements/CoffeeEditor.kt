@@ -22,17 +22,29 @@ import androidx.compose.ui.unit.dp
 import com.dr.baristatis.R
 import com.dr.baristatis.model.MyCoffeeData
 
-
+data class ErrorData(val name: String?,
+val manufacturer: String?,
+)
 @Composable
-fun CoffeeEditor(myCoffeeData: MyCoffeeData?, onCoffeeDataAdded: ((MyCoffeeData?) -> Unit), onCoffeeDataDeleted: ((Int?) -> Unit)) {
+fun CoffeeEditor(
+    myCoffeeData: MyCoffeeData?,
+    onCoffeeDataAdded: ((MyCoffeeData?) -> Unit),
+    onCoffeeDataDeleted: ((Int?) -> Unit)
+) {
     var name by remember { mutableStateOf(myCoffeeData?.name) }
     var manufacturer by remember { mutableStateOf(myCoffeeData?.manufacturer) }
     var arabicaRatio by remember { mutableStateOf(myCoffeeData?.arabicaRatio ?: 0.8f) }
     var remarks by remember { mutableStateOf(myCoffeeData?.remarks) }
     var preferreedBrewingTemperatur by remember { mutableStateOf(myCoffeeData?.prefferredBrewingTemperature) }
     var weightInPortaFilter by remember { mutableStateOf(myCoffeeData?.weightInPortafilter) }
+    var degreeOfGrinding by remember { mutableStateOf(myCoffeeData?.deggreeOfGrinding) }
 
-    var showDeleteDialog by remember { mutableStateOf(false)}
+    var nameError by remember { mutableStateOf(false) }
+    var manufacturerError by remember { mutableStateOf(false) }
+
+    var showDeleteDialog by remember { mutableStateOf(false) }
+
+    // TODO mahlgrad
 
     Column(
         Modifier
@@ -44,14 +56,14 @@ fun CoffeeEditor(myCoffeeData: MyCoffeeData?, onCoffeeDataAdded: ((MyCoffeeData?
             title = stringResource(R.string.coffee_name),
             text = name,
             onChange = { name = it },
-            keyboardOptions = KeyboardOptions( imeAction = ImeAction.Next ),
+            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
             keyboardActions = KeyboardActions(
                 onNext = { focusManager.moveFocus(FocusDirection.Down) }
             ))
         InputField(
             title = stringResource(R.string.manufacturer),
             text = manufacturer,
-            keyboardOptions = KeyboardOptions( imeAction = ImeAction.Next ),
+            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
             onChange = { manufacturer = it })
 
         RatioEditor(
@@ -61,6 +73,8 @@ fun CoffeeEditor(myCoffeeData: MyCoffeeData?, onCoffeeDataAdded: ((MyCoffeeData?
             onValueChange = { ratio -> arabicaRatio = ratio }
         )
 
+        // TODO doch eine reihe und degree of grinding?
+        
         Row(
             modifier = Modifier.fillMaxSize(),
             horizontalArrangement = Arrangement.SpaceEvenly
@@ -69,13 +83,16 @@ fun CoffeeEditor(myCoffeeData: MyCoffeeData?, onCoffeeDataAdded: ((MyCoffeeData?
             // TODO icon
             Text(stringResource(id = R.string.temp))
             OutlinedTextField(
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number,imeAction = ImeAction.Next ),
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Number,
+                    imeAction = ImeAction.Next
+                ),
                 value = preferreedBrewingTemperatur?.toString() ?: "",
                 onValueChange = {
                     try {
                         preferreedBrewingTemperatur = if (it.toInt() < 100) it.toInt() else 100
                     } catch (e: NumberFormatException) {
-                        // do nothing
+                        preferreedBrewingTemperatur = null
                     }
                 },
                 modifier = Modifier.width(100.dp),
@@ -84,14 +101,17 @@ fun CoffeeEditor(myCoffeeData: MyCoffeeData?, onCoffeeDataAdded: ((MyCoffeeData?
             // TODO icon
             Text(stringResource(id = R.string.weight))
             OutlinedTextField(
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number,imeAction = ImeAction.Next ),
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Number,
+                    imeAction = ImeAction.Next
+                ),
                 value = weightInPortaFilter?.toString() ?: "",
                 modifier = Modifier.width(100.dp),
                 onValueChange = {
                     try {
                         weightInPortaFilter = it.toFloat()
                     } catch (e: NumberFormatException) {
-                        // do nothing
+                        weightInPortaFilter = null
                     }
                 },
                 maxLines = 1
@@ -110,7 +130,7 @@ fun CoffeeEditor(myCoffeeData: MyCoffeeData?, onCoffeeDataAdded: ((MyCoffeeData?
             .padding(top = 20.dp, start = 10.dp, end = 10.dp),
             onClick = {
                 onCoffeeDataAdded.invoke(
-                    createCoffeeData(
+                    saveCoffeeData(
                         myCoffeeData,
                         name,
                         manufacturer,
@@ -133,7 +153,7 @@ fun CoffeeEditor(myCoffeeData: MyCoffeeData?, onCoffeeDataAdded: ((MyCoffeeData?
             Text(stringResource(id = R.string.delete))
         }
 
-        if(showDeleteDialog) {
+        if (showDeleteDialog) {
             AlertDialog(
                 onDismissRequest = {
                     // Dismiss the dialog when the user clicks outside the dialog or on the back
@@ -171,7 +191,7 @@ fun CoffeeEditor(myCoffeeData: MyCoffeeData?, onCoffeeDataAdded: ((MyCoffeeData?
     }
 }
 
-fun createCoffeeData(
+fun saveCoffeeData(
     myCoffeeData: MyCoffeeData?,
     name: String?,
     manufacturer: String?,
@@ -209,7 +229,6 @@ fun InputField(
     OutlinedTextField(
         singleLine = maxLines == 1,
         keyboardOptions = keyboardOptions ?: KeyboardOptions.Default,
-        keyboardActions = keyboardActions ?: KeyboardActions.Default,
         value = text ?: "",
         modifier = Modifier
             .fillMaxWidth()
