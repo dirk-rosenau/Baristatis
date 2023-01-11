@@ -13,5 +13,7 @@ data class MyCoffeeData(
     val remarks: String? = null,
     val arabicaRatio: Float? = null,
     val weightInPortafilter: Float? = null,
-    val deggreeOfGrinding: Int?
+    val deggreeOfGrinding: Int?,
+    val rating: Int? = null,
+    val grinderTime: Float? = null,
 )

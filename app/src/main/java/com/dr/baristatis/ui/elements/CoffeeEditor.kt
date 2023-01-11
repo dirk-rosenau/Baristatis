@@ -17,19 +17,28 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.dr.baristatis.R
 import com.dr.baristatis.model.MyCoffeeData
 
-data class ErrorData(val name: String?,
-val manufacturer: String?,
+data class ErrorData(
+    val name: String?,
+    val manufacturer: String?,
 )
+
+@Preview
+@Composable
+fun CoffeEditorPreview() {
+    CoffeeEditor(myCoffeeData = null, onCoffeeDataAdded = null, onCoffeeDataDeleted = null)
+}
+
 @Composable
 fun CoffeeEditor(
     myCoffeeData: MyCoffeeData?,
-    onCoffeeDataAdded: ((MyCoffeeData?) -> Unit),
-    onCoffeeDataDeleted: ((Int?) -> Unit)
+    onCoffeeDataAdded: ((MyCoffeeData?) -> Unit)?,
+    onCoffeeDataDeleted: ((Int?) -> Unit)?
 ) {
     var name by remember { mutableStateOf(myCoffeeData?.name) }
     var manufacturer by remember { mutableStateOf(myCoffeeData?.manufacturer) }
@@ -38,6 +47,8 @@ fun CoffeeEditor(
     var preferreedBrewingTemperatur by remember { mutableStateOf(myCoffeeData?.prefferredBrewingTemperature) }
     var weightInPortaFilter by remember { mutableStateOf(myCoffeeData?.weightInPortafilter) }
     var degreeOfGrinding by remember { mutableStateOf(myCoffeeData?.deggreeOfGrinding) }
+    var grinderTime by remember { mutableStateOf(myCoffeeData?.grinderTime) }
+    var rating by remember { mutableStateOf(myCoffeeData?.rating) }
 
     var nameError by remember { mutableStateOf(false) }
     var manufacturerError by remember { mutableStateOf(false) }
@@ -74,7 +85,7 @@ fun CoffeeEditor(
         )
 
         // TODO doch eine reihe und degree of grinding?
-        
+
         Row(
             modifier = Modifier.fillMaxSize(),
             horizontalArrangement = Arrangement.SpaceEvenly
@@ -118,6 +129,53 @@ fun CoffeeEditor(
             )
         }
 
+    // RatingBar
+
+        Row(
+            modifier = Modifier.fillMaxSize(),
+            horizontalArrangement = Arrangement.SpaceEvenly
+        ) {
+
+            // TODO icon
+            Text(stringResource(id = R.string.degOfGrind))
+            OutlinedTextField(
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Number,
+                    imeAction = ImeAction.Next
+                ),
+                value = degreeOfGrinding?.toString() ?: "",
+                onValueChange = {
+                    try {
+                        degreeOfGrinding = if (it.toInt() < 100) it.toInt() else 100
+                    } catch (e: NumberFormatException) {
+                        degreeOfGrinding = null
+                    }
+                },
+                modifier = Modifier.width(100.dp),
+                maxLines = 1
+            )
+            // TODO icon
+            Text(stringResource(id = R.string.grindTime))
+            OutlinedTextField(
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Number,
+                    imeAction = ImeAction.Next
+                ),
+                value = grinderTime?.toString() ?: "",
+                modifier = Modifier.width(100.dp),
+                onValueChange = {
+                    try {
+                        grinderTime = it.toFloat()
+                    } catch (e: NumberFormatException) {
+                        grinderTime = null
+                    }
+                },
+                maxLines = 1
+            )
+        }
+
+
+
         InputField(
             title = stringResource(R.string.remarks),
             text = remarks,
@@ -129,8 +187,8 @@ fun CoffeeEditor(
             .fillMaxWidth()
             .padding(top = 20.dp, start = 10.dp, end = 10.dp),
             onClick = {
-                onCoffeeDataAdded.invoke(
-                    saveCoffeeData(
+                onCoffeeDataAdded?.invoke(
+                    getCoffeeDataObject(
                         myCoffeeData,
                         name,
                         manufacturer,
@@ -172,7 +230,7 @@ fun CoffeeEditor(
 
                         onClick = {
                             showDeleteDialog = false
-                            onCoffeeDataDeleted.invoke(myCoffeeData?.id)
+                            onCoffeeDataDeleted?.invoke(myCoffeeData?.id)
                         }) {
                         Text(stringResource(id = R.string.yes))
                     }
@@ -191,7 +249,7 @@ fun CoffeeEditor(
     }
 }
 
-fun saveCoffeeData(
+fun getCoffeeDataObject(
     myCoffeeData: MyCoffeeData?,
     name: String?,
     manufacturer: String?,

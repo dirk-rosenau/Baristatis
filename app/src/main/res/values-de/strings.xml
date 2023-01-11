@@ -19,4 +19,6 @@
     <string name="no">Nein</string>
     <string name="weight">Gewicht</string>
     <string name="temp">Temp</string>
+    <string name="degOfGrind">Mahlgrad</string>
+    <string name="grindTime">Mahlzeit</string>
 </resources>
