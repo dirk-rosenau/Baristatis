@@ -1,6 +1,7 @@
 package com.dr.baristatis.ui.elements
 
 import android.annotation.SuppressLint
+import android.util.Log
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardActions
@@ -22,6 +23,9 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.dr.baristatis.R
 import com.dr.baristatis.model.MyCoffeeData
+import com.gowtham.ratingbar.RatingBar
+import com.gowtham.ratingbar.RatingBarConfig
+import com.gowtham.ratingbar.RatingBarStyle
 
 data class ErrorData(
     val name: String?,
@@ -77,14 +81,29 @@ fun CoffeeEditor(
             keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
             onChange = { manufacturer = it })
 
+        Row(
+            modifier = Modifier.fillMaxSize().padding(20.dp),
+            horizontalArrangement = Arrangement.SpaceEvenly
+        ) {
+            RatingBar(
+                value = rating ?: 0f,
+                config = RatingBarConfig()
+                    .style(RatingBarStyle.HighLighted),
+                onValueChange = {
+                    rating = it
+                },
+                onRatingChanged = {
+                    Log.d("TAG", "onRatingChanged: $it")
+                }
+            )
+        }
+
         RatioEditor(
             leftText = stringResource(id = R.string.arabicaRatio), rightText = stringResource(
                 id = R.string.robustaRatio
             ), ratio = arabicaRatio,
             onValueChange = { ratio -> arabicaRatio = ratio }
         )
-
-        // TODO doch eine reihe und degree of grinding?
 
         Row(
             modifier = Modifier.fillMaxSize(),
@@ -128,8 +147,6 @@ fun CoffeeEditor(
                 maxLines = 1
             )
         }
-
-    // RatingBar
 
         Row(
             modifier = Modifier.fillMaxSize(),
@@ -195,7 +212,8 @@ fun CoffeeEditor(
                         arabicaRatio,
                         remarks,
                         preferreedBrewingTemperatur,
-                        weightInPortaFilter
+                        weightInPortaFilter,
+                        rating
                     )
                 )
             }) {
@@ -256,7 +274,8 @@ fun getCoffeeDataObject(
     arabicaRatio: Float?,
     remarks: String?,
     preferredBrewingTemperature: Int?,
-    weightInPortaFilter: Float?
+    weightInPortaFilter: Float?,
+    rating: Float?,
 ): MyCoffeeData? {
     if (name != null && manufacturer != null) {
         return MyCoffeeData(
@@ -266,6 +285,7 @@ fun getCoffeeDataObject(
             arabicaRatio = arabicaRatio,
             remarks = remarks,
             deggreeOfGrinding = null,
+            rating = rating,
             prefferredBrewingTemperature = preferredBrewingTemperature,
             weightInPortafilter = weightInPortaFilter
         )
