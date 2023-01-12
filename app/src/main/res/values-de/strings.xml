@@ -21,4 +21,6 @@
     <string name="temp">Temp</string>
     <string name="degOfGrind">Mahlgrad</string>
     <string name="grindTime">Mahlzeit</string>
+    <string name="error">Es ist ein Fehler aufgetreten!</string>
+    <string name="loading">Loading</string>
 </resources>
