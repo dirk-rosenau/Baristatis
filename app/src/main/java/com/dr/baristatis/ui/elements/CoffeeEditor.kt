@@ -1,7 +1,6 @@
 package com.dr.baristatis.ui.elements
 
 import android.annotation.SuppressLint
-import android.util.Log
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardActions
@@ -27,14 +26,9 @@ import com.gowtham.ratingbar.RatingBar
 import com.gowtham.ratingbar.RatingBarConfig
 import com.gowtham.ratingbar.RatingBarStyle
 
-data class ErrorData(
-    val name: String?,
-    val manufacturer: String?,
-)
-
 @Preview
 @Composable
-fun CoffeEditorPreview() {
+fun CoffeeEditorPreview() {
     CoffeeEditor(myCoffeeData = null, onCoffeeDataAdded = null, onCoffeeDataDeleted = null)
 }
 
@@ -54,12 +48,7 @@ fun CoffeeEditor(
     var grinderTime by remember { mutableStateOf(myCoffeeData?.grinderTime) }
     var rating by remember { mutableStateOf(myCoffeeData?.rating) }
 
-    var nameError by remember { mutableStateOf(false) }
-    var manufacturerError by remember { mutableStateOf(false) }
-
     var showDeleteDialog by remember { mutableStateOf(false) }
-
-    // TODO mahlgrad
 
     Column(
         Modifier
@@ -82,7 +71,9 @@ fun CoffeeEditor(
             onChange = { manufacturer = it })
 
         Row(
-            modifier = Modifier.fillMaxSize().padding(20.dp),
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(20.dp),
             horizontalArrangement = Arrangement.SpaceEvenly
         ) {
             RatingBar(
@@ -92,9 +83,7 @@ fun CoffeeEditor(
                 onValueChange = {
                     rating = it
                 },
-                onRatingChanged = {
-                    Log.d("TAG", "onRatingChanged: $it")
-                }
+                onRatingChanged = {}
             )
         }
 
@@ -102,95 +91,125 @@ fun CoffeeEditor(
             leftText = stringResource(id = R.string.arabicaRatio), rightText = stringResource(
                 id = R.string.robustaRatio
             ), ratio = arabicaRatio,
+            modifier = Modifier.padding(20.dp),
             onValueChange = { ratio -> arabicaRatio = ratio }
         )
 
-        Row(
-            modifier = Modifier.fillMaxSize(),
-            horizontalArrangement = Arrangement.SpaceEvenly
-        ) {
+        val gridPadding = 10.dp
 
-            // TODO icon
-            Text(stringResource(id = R.string.temp))
-            OutlinedTextField(
-                keyboardOptions = KeyboardOptions(
-                    keyboardType = KeyboardType.Number,
-                    imeAction = ImeAction.Next
-                ),
-                value = preferreedBrewingTemperatur?.toString() ?: "",
-                onValueChange = {
-                    try {
-                        preferreedBrewingTemperatur = if (it.toInt() < 100) it.toInt() else 100
-                    } catch (e: NumberFormatException) {
-                        preferreedBrewingTemperatur = null
-                    }
-                },
-                modifier = Modifier.width(100.dp),
-                maxLines = 1
-            )
-            // TODO icon
-            Text(stringResource(id = R.string.weight))
-            OutlinedTextField(
-                keyboardOptions = KeyboardOptions(
-                    keyboardType = KeyboardType.Number,
-                    imeAction = ImeAction.Next
-                ),
-                value = weightInPortaFilter?.toString() ?: "",
-                modifier = Modifier.width(100.dp),
-                onValueChange = {
-                    try {
-                        weightInPortaFilter = it.toFloat()
-                    } catch (e: NumberFormatException) {
-                        weightInPortaFilter = null
-                    }
-                },
-                maxLines = 1
-            )
+        Column(modifier = Modifier.padding(10.dp)) {
+            Row(
+                Modifier
+                    .fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceEvenly
+            ) {
+
+                // TODO icon
+                Text(
+                    stringResource(id = R.string.temp), modifier = Modifier
+                        .weight(1f)
+                        .padding(gridPadding)
+                )
+                OutlinedTextField(
+                    keyboardOptions = KeyboardOptions(
+                        keyboardType = KeyboardType.Number,
+                        imeAction = ImeAction.Next
+                    ),
+                    value = preferreedBrewingTemperatur?.toString() ?: "",
+                    onValueChange = {
+                        try {
+                            preferreedBrewingTemperatur = if (it.toInt() < 100) it.toInt() else 100
+                        } catch (e: NumberFormatException) {
+                            preferreedBrewingTemperatur = null
+                        }
+                    },
+                    modifier = Modifier
+                        .weight(1f)
+                        .padding(gridPadding),
+                    maxLines = 1
+                )
+                // TODO icon
+                Text(
+                    stringResource(id = R.string.weight), modifier = Modifier
+                        .weight(1f)
+                        .padding(gridPadding)
+                )
+                OutlinedTextField(
+                    keyboardOptions = KeyboardOptions(
+                        keyboardType = KeyboardType.Number,
+                        imeAction = ImeAction.Next
+                    ),
+                    value = weightInPortaFilter?.toString() ?: "",
+                    modifier = Modifier
+                        .weight(1f)
+                        .padding(gridPadding),
+                    onValueChange = {
+                        weightInPortaFilter = try {
+                            it.toFloat()
+                        } catch (e: NumberFormatException) {
+                            null
+                        }
+                    },
+                    maxLines = 1
+                )
+            }
+
+            Row(
+                modifier = Modifier.fillMaxSize(),
+                horizontalArrangement = Arrangement.SpaceEvenly
+            ) {
+
+                // TODO icon
+                Text(
+                    stringResource(id = R.string.degOfGrind),
+                    modifier = Modifier
+                        .weight(1f)
+                        .padding(gridPadding)
+                )
+                OutlinedTextField(
+                    keyboardOptions = KeyboardOptions(
+                        keyboardType = KeyboardType.Number,
+                        imeAction = ImeAction.Next
+                    ),
+                    value = degreeOfGrinding?.toString() ?: "",
+                    onValueChange = {
+                        try {
+                            degreeOfGrinding = if (it.toInt() < 100) it.toInt() else 100
+                        } catch (e: NumberFormatException) {
+                            degreeOfGrinding = null
+                        }
+                    },
+                    modifier = Modifier
+                        .weight(1f)
+                        .padding(gridPadding),
+                    maxLines = 1
+                )
+                // TODO icon
+                Text(
+                    stringResource(id = R.string.grindTime), modifier = Modifier
+                        .weight(1f)
+                        .padding(gridPadding)
+                )
+                OutlinedTextField(
+                    keyboardOptions = KeyboardOptions(
+                        keyboardType = KeyboardType.Number,
+                        imeAction = ImeAction.Next
+                    ),
+                    value = grinderTime?.toString() ?: "",
+                    modifier = Modifier
+                        .weight(1f)
+                        .padding(gridPadding),
+                    onValueChange = {
+                        grinderTime = try {
+                            it.toFloat()
+                        } catch (e: NumberFormatException) {
+                            null
+                        }
+                    },
+                    maxLines = 1
+                )
+            }
         }
-
-        Row(
-            modifier = Modifier.fillMaxSize(),
-            horizontalArrangement = Arrangement.SpaceEvenly
-        ) {
-
-            // TODO icon
-            Text(stringResource(id = R.string.degOfGrind))
-            OutlinedTextField(
-                keyboardOptions = KeyboardOptions(
-                    keyboardType = KeyboardType.Number,
-                    imeAction = ImeAction.Next
-                ),
-                value = degreeOfGrinding?.toString() ?: "",
-                onValueChange = {
-                    try {
-                        degreeOfGrinding = if (it.toInt() < 100) it.toInt() else 100
-                    } catch (e: NumberFormatException) {
-                        degreeOfGrinding = null
-                    }
-                },
-                modifier = Modifier.width(100.dp),
-                maxLines = 1
-            )
-            // TODO icon
-            Text(stringResource(id = R.string.grindTime))
-            OutlinedTextField(
-                keyboardOptions = KeyboardOptions(
-                    keyboardType = KeyboardType.Number,
-                    imeAction = ImeAction.Next
-                ),
-                value = grinderTime?.toString() ?: "",
-                modifier = Modifier.width(100.dp),
-                onValueChange = {
-                    try {
-                        grinderTime = it.toFloat()
-                    } catch (e: NumberFormatException) {
-                        grinderTime = null
-                    }
-                },
-                maxLines = 1
-            )
-        }
-
 
 
         InputField(

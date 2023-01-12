@@ -1,11 +1,9 @@
 package com.dr.baristatis.ui.elements
 
 import androidx.compose.animation.animateContentSize
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material.MaterialTheme
@@ -15,9 +13,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -25,6 +20,9 @@ import androidx.compose.ui.unit.sp
 import com.dr.baristatis.R
 import com.dr.baristatis.commons.OnMyCoffeeItemClicked
 import com.dr.baristatis.model.MyCoffeeData
+import com.gowtham.ratingbar.RatingBar
+import com.gowtham.ratingbar.RatingBarConfig
+import com.gowtham.ratingbar.RatingBarStyle
 
 
 @Composable
@@ -42,22 +40,22 @@ fun CoffeeCard(myCoffeeData: MyCoffeeData, onMyCoffeeItemClicked: OnMyCoffeeItem
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier.fillMaxWidth()
             ) { // first section: image, names temp and weight
-               /* Image(
-                    painter = painterResource(id = R.drawable.coffee_beans), // TODO use image from data
-                    contentDescription = "",
-                    contentScale = ContentScale.Crop,
-                    modifier = Modifier
-                        .padding(10.dp)
-                        .size(72.dp)
-                        .clip(CircleShape)
-                )*/
-                Spacer(modifier =   Modifier.padding(10.dp))
+                /* Image(
+                     painter = painterResource(id = R.drawable.coffee_beans), // TODO use image from data
+                     contentDescription = "",
+                     contentScale = ContentScale.Crop,
+                     modifier = Modifier
+                         .padding(10.dp)
+                         .size(72.dp)
+                         .clip(CircleShape)
+                 )*/
+                Spacer(modifier = Modifier.padding(10.dp))
                 Column(Modifier.weight(4f)) {
                     Text(text = myCoffeeData.name, fontSize = 24.sp)
                     Text(text = myCoffeeData.manufacturer, fontSize = 14.sp)
                 }
                 Column(modifier = Modifier.weight(1f)) {
-                    myCoffeeData.prefferredBrewingTemperature?.let{
+                    myCoffeeData.prefferredBrewingTemperature?.let {
                         Text(text = "$it °")
                     }
 
@@ -66,6 +64,18 @@ fun CoffeeCard(myCoffeeData: MyCoffeeData, onMyCoffeeItemClicked: OnMyCoffeeItem
                     }
                 }
             }
+
+            RatingBar(
+                modifier = Modifier
+                    .align(Alignment.End)
+                    .padding(PaddingValues(top = 10.dp, end = 10.dp)),
+                value = myCoffeeData.rating ?: 0f,
+                config = RatingBarConfig().size(20.dp)
+                    .style(RatingBarStyle.HighLighted).isIndicator(true),
+                onValueChange = {},
+                onRatingChanged = {}
+            )
+
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier.padding(10.dp)
@@ -86,7 +96,7 @@ fun CoffeeCard(myCoffeeData: MyCoffeeData, onMyCoffeeItemClicked: OnMyCoffeeItem
                     modifier = Modifier.getDefaultTextPadding()
                 )
                 Text(
-                    text = myCoffeeData.remarks ?: "",
+                    text = myCoffeeData.remarks,
                     modifier = Modifier
                         .fillMaxWidth()
                         .getDefaultTextPadding()
@@ -98,7 +108,8 @@ fun CoffeeCard(myCoffeeData: MyCoffeeData, onMyCoffeeItemClicked: OnMyCoffeeItem
                         .padding(10.dp)
                         .animateContentSize()
                         .clickable {
-                            maxLines.value = if (maxLines.value == Int.MAX_VALUE) 5 else Int.MAX_VALUE
+                            maxLines.value =
+                                if (maxLines.value == Int.MAX_VALUE) 5 else Int.MAX_VALUE
                         },
                     overflow = TextOverflow.Ellipsis,
                     maxLines = maxLines.value,

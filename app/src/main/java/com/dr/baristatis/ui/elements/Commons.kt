@@ -28,12 +28,12 @@ fun RatioEditor(
     leftText: String,
     rightText: String,
     ratio: Float,
+    modifier: Modifier = Modifier,
     onValueChange: (Float) -> Unit
 ) {
-    Column(Modifier.padding(20.dp)) {
+    Column(modifier) {
         RatioLabel(leftText = leftText, rightText = rightText)
         var tmpRatio = ratio
-        //Text(text = "${(tmpRatio * 100).toInt()} %", modifier = Modifier.align(Alignment.CenterHorizontally))
         Text(
             text = stringResource(id = R.string.tmpRatioSliderLabel, (tmpRatio * 100).toInt()),
             modifier = Modifier.align(Alignment.CenterHorizontally)
