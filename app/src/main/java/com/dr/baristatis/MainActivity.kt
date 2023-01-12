@@ -6,14 +6,13 @@ import androidx.activity.compose.setContent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.Menu
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.view.WindowCompat
 import androidx.navigation.NavType
@@ -21,7 +20,6 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import com.dr.baristatis.ui.elements.CoffeeDetails
 import com.dr.baristatis.ui.elements.CoffeeEditor
 import com.dr.baristatis.ui.elements.CoffeeMainScreen
 import com.dr.baristatis.ui.theme.BaristatisTheme
@@ -29,7 +27,6 @@ import com.dr.baristatis.ui.vm.MainViewModel
 import com.google.accompanist.insets.ProvideWindowInsets
 import com.google.accompanist.insets.navigationBarsWithImePadding
 import com.google.accompanist.insets.statusBarsPadding
-import com.google.accompanist.insets.systemBarsPadding
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
@@ -100,8 +97,12 @@ fun Content(viewModel: MainViewModel) {
                     }
                 }
             },
-            content = {
-                NavHost(navController = navController, startDestination = "coffeeList") {
+            content = { padding ->
+                NavHost(
+                    navController = navController,
+                    startDestination = "coffeeList",
+                    modifier = Modifier.padding(padding)
+                ) {
                     // main list
                     composable("coffeeList") {
                         showFAB = true
