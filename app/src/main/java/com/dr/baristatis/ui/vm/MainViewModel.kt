@@ -18,8 +18,21 @@ class MainViewModel(private val coffeeRepository: CoffeeRepository) : ViewModel(
     data class Success(val data: List<MyCoffeeData>) : MainViewState()
     data class Error(val throwable: Throwable) : MainViewState()
 
+
+    private val sortFlow = MutableStateFlow(SortOption.NAME)
+
     init {
-        coffeeRepository.getCoffees()
+        coffeeRepository.getCoffees().combine(sortFlow) { coffees, sort ->
+            coffees.sortedWith { o1, o2 ->
+                when (sort) {
+                    SortOption.NAME -> o1.name.compareTo(o2.name)
+                    SortOption.RATING -> if (o1.rating != null && o2.rating != null) {
+                        o1.rating.compareTo(o2.rating)
+                    } else 0
+                    else -> o1.name.compareTo(o2.name)
+                }
+            }
+        }
             .onStart { _state.emit(Loading) }
             .onEach {
                 _state.emit(Success(it))
@@ -29,6 +42,18 @@ class MainViewModel(private val coffeeRepository: CoffeeRepository) : ViewModel(
                 throwable.message?.let { Log.d("MainViewModel", it) }
             }
             .launchIn(viewModelScope)
+    }
+
+    fun setSortOrder(value: SortOption) {
+        viewModelScope.launch {
+            sortFlow.emit(value)
+        }
+    }
+
+    enum class SortOption {
+        NAME,
+        DATE,
+        RATING
     }
 
     //TODO method in dao

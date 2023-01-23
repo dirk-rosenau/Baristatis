@@ -13,6 +13,8 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.view.WindowCompat
 import androidx.navigation.NavType
@@ -22,6 +24,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.dr.baristatis.ui.elements.CoffeeEditor
 import com.dr.baristatis.ui.elements.CoffeeMainScreen
+import com.dr.baristatis.ui.elements.SortDialog
 import com.dr.baristatis.ui.theme.BaristatisTheme
 import com.dr.baristatis.ui.vm.MainViewModel
 import com.google.accompanist.insets.ProvideWindowInsets
@@ -51,6 +54,7 @@ fun Content(viewModel: MainViewModel) {
     BaristatisTheme {
         var showFAB by remember { mutableStateOf(true) }
         var showBack by remember { mutableStateOf(false) }
+        var showSortDialog by remember { mutableStateOf(false) }
         val navController = rememberNavController()
         Scaffold(
             modifier = Modifier
@@ -79,9 +83,15 @@ fun Content(viewModel: MainViewModel) {
                                 )
                             }
                         }
+                    },
+                    actions = {
+                        IconButton(onClick = {
+                            showSortDialog = true
+                        }) {
+                            Icon(painter = painterResource(id = R.drawable.sort), null)
+                        }
                     }
                 )
-                //   }
             },
             floatingActionButton = {
                 AnimatedVisibility(
@@ -110,6 +120,20 @@ fun Content(viewModel: MainViewModel) {
                         CoffeeMainScreen(viewModel, onMyCoffeeItemClicked = { item ->
                             navController.navigate("edit/${item.id}")
                         })
+                        if (showSortDialog) {
+                            val radioOptions = listOf(
+                                stringResource(id = R.string.sort_rating),
+                                stringResource(id = R.string.sort_date),
+                                stringResource(id = R.string.sort_name)
+                            )
+                            SortDialog(radioOptions, { showSortDialog = false }, onClickOk = {
+                                when(it){
+                                    0 -> viewModel.setSortOrder(MainViewModel.SortOption.RATING)
+                                    1 -> viewModel.setSortOrder(MainViewModel.SortOption.DATE)
+                                    2 -> viewModel.setSortOrder(MainViewModel.SortOption.NAME)
+                                }
+                            })
+                        }
                     }
                     // editor
                     composable(
@@ -142,6 +166,11 @@ fun Content(viewModel: MainViewModel) {
             }
         )
     }
+}
+
+@Composable
+fun SortDialog(){
+
 }
 
 @Preview(showBackground = true)

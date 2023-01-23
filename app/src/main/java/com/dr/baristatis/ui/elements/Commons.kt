@@ -1,13 +1,20 @@
 package com.dr.baristatis.ui.elements
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.selection.selectable
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Dialog
 import com.dr.baristatis.R
 
 @Composable
@@ -61,4 +68,70 @@ fun RatioLabel(leftText: String, rightText: String) {
             color = MaterialTheme.colors.primary.copy(alpha = ProgressIndicatorDefaults.IndicatorBackgroundOpacity)
         )
     }
+}
+
+@Composable
+fun SortDialog(radioOptions: List<String>, onDismiss: () -> Unit, onClickOk: (Int) -> Unit) {
+
+    Dialog(
+        onDismissRequest = {
+            onDismiss.invoke()
+        },
+        content = {
+            Surface(
+                shape = RoundedCornerShape(16.dp),
+                color = Color.White
+            ) {
+                val (selectedOption, onOptionSelected) = remember { mutableStateOf(radioOptions[1]) }
+                Column {
+                    Text(
+                        text = stringResource(id = R.string.sort),
+                        Modifier
+                            .align(Alignment.CenterHorizontally)
+                            .padding(10.dp)
+                    )
+                    radioOptions.forEach { text ->
+                        Row(
+                            Modifier
+                                .fillMaxWidth()
+                                .selectable(
+                                    selected = (text == selectedOption),
+                                    onClick = {
+                                        onOptionSelected(text)
+                                    }
+                                )
+                                .padding(horizontal = 16.dp),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            RadioButton(
+                                selected = (text == selectedOption),
+                                onClick = { onOptionSelected(text) }
+                            )
+                            Text(
+                                text = text,
+                                style = MaterialTheme.typography.body1.merge(),
+                                modifier = Modifier.padding(start = 16.dp)
+                            )
+                        }
+                    }
+
+                    Button(
+                        onClick = {
+                            onClickOk(radioOptions.indexOf(selectedOption))
+                        }, Modifier
+                            .align(Alignment.CenterHorizontally)
+                            .padding(10.dp)
+                    ) {
+                        Text(text = stringResource(id = R.string.ok))
+                    }
+                }
+            }
+        }
+    )
+}
+
+@Preview
+@Composable
+fun PreviewSortDialog() {
+    SortDialog(listOf("1", "2", "3"), {}, {})
 }

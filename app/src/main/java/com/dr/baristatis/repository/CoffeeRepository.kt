@@ -12,7 +12,7 @@ class CoffeeRepository(private val coffeeDataDao: CoffeeDataDao) {
     }
 
     suspend fun deleteCoffee(id: Int) {
-coffeeDataDao.delete(id)
+        coffeeDataDao.delete(id)
     }
 
 }

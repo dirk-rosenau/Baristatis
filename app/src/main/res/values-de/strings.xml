@@ -17,10 +17,15 @@
     <string name="confirm_delete_explain">Wollen Sie den Datensatz wirklich löschen?</string>
     <string name="yes">Ja</string>
     <string name="no">Nein</string>
+    <string name="ok">OK</string>
     <string name="weight">Gewicht</string>
     <string name="temp">Temp</string>
     <string name="degOfGrind">Mahlgrad</string>
     <string name="grindTime">Mahlzeit</string>
     <string name="error">Es ist ein Fehler aufgetreten!</string>
     <string name="loading">Loading</string>
+    <string name="sort">Sortieren</string>
+    <string name="sort_rating">Bewertung</string>
+    <string name="sort_date">Datum</string>
+    <string name="sort_name">Name</string>
 </resources>
