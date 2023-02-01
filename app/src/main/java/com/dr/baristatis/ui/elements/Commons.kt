@@ -71,7 +71,7 @@ fun RatioLabel(leftText: String, rightText: String) {
 }
 
 @Composable
-fun SortDialog(radioOptions: List<String>, onDismiss: () -> Unit, onClickOk: (Int) -> Unit) {
+fun SortDialog(radioOptions: List<String>, selectedItem: Int, onDismiss: () -> Unit, onClickOk: (Int) -> Unit) {
 
     Dialog(
         onDismissRequest = {
@@ -82,7 +82,7 @@ fun SortDialog(radioOptions: List<String>, onDismiss: () -> Unit, onClickOk: (In
                 shape = RoundedCornerShape(16.dp),
                 color = Color.White
             ) {
-                val (selectedOption, onOptionSelected) = remember { mutableStateOf(radioOptions[1]) }
+                val (selectedOption, onOptionSelected) = remember { mutableStateOf(radioOptions[selectedItem]) }
                 Column {
                     Text(
                         text = stringResource(id = R.string.sort),
@@ -118,6 +118,7 @@ fun SortDialog(radioOptions: List<String>, onDismiss: () -> Unit, onClickOk: (In
                     Button(
                         onClick = {
                             onClickOk(radioOptions.indexOf(selectedOption))
+                            onDismiss()
                         }, Modifier
                             .align(Alignment.CenterHorizontally)
                             .padding(10.dp)
@@ -133,5 +134,5 @@ fun SortDialog(radioOptions: List<String>, onDismiss: () -> Unit, onClickOk: (In
 @Preview
 @Composable
 fun PreviewSortDialog() {
-    SortDialog(listOf("1", "2", "3"), {}, {})
+    SortDialog(listOf("1", "2", "3"), 0, {}, {})
 }

@@ -3,6 +3,7 @@ package com.dr.baristatis.ui.vm
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.dr.baristatis.commons.SortOption
 import com.dr.baristatis.model.MyCoffeeData
 import com.dr.baristatis.repository.CoffeeRepository
 import kotlinx.coroutines.flow.*
@@ -25,9 +26,8 @@ class MainViewModel(private val coffeeRepository: CoffeeRepository) : ViewModel(
         coffeeRepository.getCoffees().combine(sortFlow) { coffees, sort ->
             coffees.sortedWith { o1, o2 ->
                 when (sort) {
-                    SortOption.NAME -> o1.name.compareTo(o2.name)
                     SortOption.RATING -> if (o1.rating != null && o2.rating != null) {
-                        o1.rating.compareTo(o2.rating)
+                        o2.rating.compareTo(o1.rating)
                     } else 0
                     else -> o1.name.compareTo(o2.name)
                 }
@@ -44,17 +44,13 @@ class MainViewModel(private val coffeeRepository: CoffeeRepository) : ViewModel(
             .launchIn(viewModelScope)
     }
 
-    fun setSortOrder(value: SortOption) {
+    fun setSortOption(value: SortOption) {
         viewModelScope.launch {
             sortFlow.emit(value)
         }
     }
 
-    enum class SortOption {
-        NAME,
-        DATE,
-        RATING
-    }
+    fun getSortOption() = sortFlow.value
 
     //TODO method in dao
     fun getItem(itemId: Int) = (_state.value as? Success)?.let {

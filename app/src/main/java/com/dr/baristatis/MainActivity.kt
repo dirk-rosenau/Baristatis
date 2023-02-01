@@ -22,6 +22,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.dr.baristatis.commons.SortOption
 import com.dr.baristatis.ui.elements.CoffeeEditor
 import com.dr.baristatis.ui.elements.CoffeeMainScreen
 import com.dr.baristatis.ui.elements.SortDialog
@@ -122,17 +123,21 @@ fun Content(viewModel: MainViewModel) {
                         })
                         if (showSortDialog) {
                             val radioOptions = listOf(
+                                stringResource(id = R.string.sort_name),
                                 stringResource(id = R.string.sort_rating),
-                                stringResource(id = R.string.sort_date),
-                                stringResource(id = R.string.sort_name)
+                                //    stringResource(id = R.string.sort_date),
                             )
-                            SortDialog(radioOptions, { showSortDialog = false }, onClickOk = {
-                                when(it){
-                                    0 -> viewModel.setSortOrder(MainViewModel.SortOption.RATING)
-                                    1 -> viewModel.setSortOrder(MainViewModel.SortOption.DATE)
-                                    2 -> viewModel.setSortOrder(MainViewModel.SortOption.NAME)
-                                }
-                            })
+                            val selectedSortItem = viewModel.getSortOption().ordinal
+                            SortDialog(
+                                radioOptions,
+                                selectedSortItem,
+                                { showSortDialog = false },
+                                onClickOk = {
+                                    when (it) {
+                                        0 -> viewModel.setSortOption(SortOption.NAME)
+                                        1 -> viewModel.setSortOption(SortOption.RATING)
+                                    }
+                                })
                         }
                     }
                     // editor
@@ -166,11 +171,6 @@ fun Content(viewModel: MainViewModel) {
             }
         )
     }
-}
-
-@Composable
-fun SortDialog(){
-
 }
 
 @Preview(showBackground = true)
